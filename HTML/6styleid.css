@@ -1,0 +1,11 @@
+.red{
+    color: red;
+} /*   .(dot) use foe class */
+
+.bg-yellow{
+    background-color: yellow;
+}
+
+#seconddiv{
+    color: silver;
+}   /*   #(hash) use foe class */

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css selectors </title>
+
+    <style>
+         /* Element Selector */
+         div {
+        /* background-color:red; */
+          }
+
+        /* Class Selector */
+        
+        .red{
+            /* background-color:gray; */
+        }
+
+        /* Id Selector */
+        #green{
+            background-color:skyblue;
+        }
+
+        /* Child Selector */
+
+        div > p {
+            color: red;
+            background-color: gray;
+        }
+
+        div p {
+            color:blue;
+            background-color:pink;
+        }
+
+        /* Universal Seclecto */
+        * {
+            margin:0;
+            padding:0;
+        }
+
+        /* Pseudo Selector */
+        a:visited{
+            color:red;
+        }
+
+        a:link {
+            /* color:gray; */
+        }
+
+        a:active{
+            background-color:yellow;
+        }
+
+        a:hover{
+            /* background-color:greenyellow; */
+        }
+
+        /* all first p of each section will applicable */
+        p:first-child{
+            /* background-color:gold; */
+        }
+
+    </style>
+
+</head>
+<body>
+    <main class="one">
+        <p>i am first</p>
+        <p>i am second</p>
+    </main>
+
+    <div class="red">
+        i am in div 
+
+        <article>
+            <p> i am a para inside div </p>
+        </article>
+    </div>
+
+    <div id="green">
+        i am a another div 
+        <p>this para inside div</p>
+    </div>
+
+    <a href="http://www.google1.com"> go to google</a>   <br>
+    <a href="http://www.facebook1.com"> go to facebook</a>
+</body>
+</html>
