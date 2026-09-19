@@ -22,7 +22,7 @@ function secondsToMinute(input) {
 // getdata song name nikal rha h, show songs on playlist, if click son song play, return songs
 async function getdata(folder) {
     currentFolder = folder;
-    let a = await fetch(`http://127.0.0.1:3000/${folder}/`)      //fetch(`http://127.0.0.1:3000/songs/Bhajan/`)
+    let a = await fetch(`https://musix-beta.vercel.app/${folder}/`)      //fetch(`http://127.0.0.1:3000/songs/Bhajan/`)
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div")
@@ -106,7 +106,7 @@ async function displayAlbum() {
             
             
             // Get the meta data of the folder  
-            let a = await fetch(`http://127.0.0.1:3000/songs/${folder}/info.json`)
+            let a = await fetch(`https://musix-beta.vercel.app/songs/${folder}/info.json`)
             let response = await a.json();
             // console.log(response);
             cardCont.innerHTML = cardCont.innerHTML + `
