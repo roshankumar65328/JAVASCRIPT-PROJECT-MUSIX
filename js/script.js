@@ -22,7 +22,7 @@ function secondsToMinute(input) {
 // getdata song name nikal rha h, show songs on playlist, if click son song play, return songs
 async function getdata(folder) {
     currentFolder = folder;
-    let a = await fetch(`http://127.0.0.1:3000/${folder}/`)
+    let a = await fetch(`http://127.0.0.1:3000/${folder}/`)      //fetch(`http://127.0.0.1:3000/songs/Bhajan/`)
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div")
@@ -33,7 +33,8 @@ async function getdata(folder) {
     for (let i = 0; i < as.length; i++) {
         const element = as[i];
         if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1])
+            // songs.push(element.href.split(`/${folder}/`)[1])
+            songs.push(element.innerHTML)
             // console.log(songs);
             
         }
@@ -60,7 +61,7 @@ async function getdata(folder) {
     // if click on songlist > li then play the song
     Array.from(document.querySelector(".songlist").getElementsByTagName("li")).forEach(e => {
         e.addEventListener("click", element => {
-            // console.log(e.querySelector(".song-details").children[1].innerHTML)
+            console.log(e.querySelector(".song-details").children[1].innerHTML)
             playMusic(e.querySelector(".song-details").children[1].innerHTML.trim())
         })
 
@@ -84,7 +85,7 @@ const playMusic = (track, pause = false) => {
 // display the album on right portion on desktop
 async function displayAlbum() {
     // get the simple folder name
-    let a = await fetch(`http://127.0.0.1:3000/songs/`)
+    let a = await fetch(`songs`)
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div")
@@ -95,9 +96,14 @@ async function displayAlbum() {
     let array = Array.from(anchors)
     for (let index = 0; index < array.length; index++) {
         const e = array[index];
-        if (e.href.includes("/songs")) {
-            folder = e.href.split("/").slice(-2)[0];
+        if (e.href.includes("songs")) {
+            // console.log(e); 
             // console.log(e.href.split("/").slice(-2)[0]);
+            // console.log(e.href.split("%5C"));
+            
+            folder = e.href.split("%5C")[2].split("/")[0]
+            // console.log(folder);
+            
             
             // Get the meta data of the folder  
             let a = await fetch(`http://127.0.0.1:3000/songs/${folder}/info.json`)
@@ -121,6 +127,8 @@ async function displayAlbum() {
             //console.log(item.target);     // target.dataset karenge to card me specific element ko lega aur usse data-folder="" nahi milega
             // console.log(item.currentTarget.dataset);    // so use currentTarget.dataset.folder to indicate the specific folder
             songs = await getdata(`songs/${item.currentTarget.dataset.folder}`)
+            console.log(songs);
+            
             playMusic(songs[0])
         })
     })
@@ -131,9 +139,9 @@ async function displayAlbum() {
 async function main() {
 
     // get the list of all the songs
-    await getdata("songs/Bhajan")
+    await getdata("songs/Bhajan");
     // console.log(songs);
-    playMusic(songs[0],true)
+    playMusic(songs[0],true);
 
     //display all the playlist on the page
     await displayAlbum()
@@ -167,8 +175,14 @@ async function main() {
     previous.addEventListener("click", () => {
         currentSong.pause()
         // console.log("previous clicked")
-        // console.log(currentSong)
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        // console.log(songs);
+        
+        let src = decodeURI(currentSong.src.split("/")[5])
+        let index = songs.indexOf(`${src}`);
+        
+        // console.log(songs.indexOf(currentSong.src));
+        
+        // let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
         // let currentFile = encodeURI(currentSong.src.split("/").slice(-1)[0]);
         // let index = songs.indexOf(currentFile);
 
@@ -177,7 +191,7 @@ async function main() {
             playMusic(songs[index - 1])
         }
         else if ((index - 1) === -1) {
-            playMusic(songs[index])
+            playMusic(songs[songs.length-1])
         }
 
     })
@@ -185,13 +199,27 @@ async function main() {
     // add event listener to next
     next.addEventListener("click", () => {
         // console.log("next clicked")
-        // console.log(currentSong.src)
+        // console.log(songs);
+        // console.log(songs.length);
+        
+        let calcSrc = decodeURI(currentSong.src);
+        let src = calcSrc.split("/")[5]
+        let index = songs.indexOf(`${src}`);
+         
+        // console.log(actualIndex);
+        // console.log(indexNew);
+        // console.log(songs[0]);
+        // console.log(songs.indexOf("High Heels.mp3"));
+        // console.log(songs.indexOf(encodeURI(currentSong.src)));        
+        // console.log(songs.indexOf(encodeURI(currentSong.src)))
         // console.log(songs.indexOf(currentSong.src.split("/").slice(-1)[0]));
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        // let index = songs.indexOf(currentSong.src.split(",").slice(-1)[0])
         // let currentFile = encodeURI(currentSong.src.split("/").slice(-1)[0].replaceAll(" ","%20"));
         // let index = songs.indexOf(currentFile);
         if ((index + 1) < songs.length) {
             playMusic(songs[index + 1])
+        }else if(index === songs.length - 1){
+            playMusic(songs[0])
         }
     })
 
@@ -242,3 +270,8 @@ document.querySelector(".close").addEventListener("click",()=>{
 
 
 main()
+
+
+// let n = new Audio("songs/Bhajan%5cKaal Bhairav%20-%20Dheeraj%20soni%20SJ%20Shiv%20Ji%20Ka%20Raudra%20Roop%20Powerful%20Energetic%20Shiv%20JI%20Rap%20song.mp3")
+// console.log(n);
+// n.play()
